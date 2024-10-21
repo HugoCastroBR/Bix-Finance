@@ -3,6 +3,7 @@
   --foreground: #060d27;
   --highlight: #2A919F;
   --highlight2: #03c;
+  --darkerHighlight: #070053;
 }
 
 @media (prefers-color-scheme: light) {
