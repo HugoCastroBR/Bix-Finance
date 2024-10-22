@@ -11,6 +11,7 @@ const columns: GridColDef[] = [
     headerName: 'Date',
     type: 'dateTime',
     valueGetter: (value) => new Date(value),
+    minWidth: 120,
     flex: 2,
   },
   {
@@ -20,36 +21,43 @@ const columns: GridColDef[] = [
       const newValue = parseFloat(value) / 100;
       return newValue.toFixed(2);
     },
+    minWidth: 120,
     flex: 1,
   },
   {
     field: 'transaction_type',
     headerName: 'Transaction Type',
     flex: 1,
+    minWidth: 120,
+
   },
 
   {
     field: 'currency',
     headerName: 'Currency',
     flex: 1,
+    minWidth: 120,
 
   },
   {
     field: 'account',
     headerName: 'Account',
     flex: 1,
+    minWidth: 120,
 
   },
   {
     field: 'industry',
     headerName: 'Industry',
     flex: 1,
+    minWidth: 120,
 
   },
   {
     field: 'state',
     headerName: 'State',
     flex: 1,
+    minWidth: 120,
 
   },
   {
@@ -175,14 +183,21 @@ interface CustomToolbarProps {
 function CustomToolbar({ setFilterButtonEl }: CustomToolbarProps) {
   return (
     <GridToolbarContainer>
-      <GridToolbarFilterButton 
-      ref={setFilterButtonEl} 
-      slotProps={{
-        button: {
-          variant: 'contained',
-          color: 'secondary',
-      }}
-      }
+      <GridToolbarFilterButton
+        ref={setFilterButtonEl}
+        slotProps={{
+          button: {
+            variant: 'contained',
+            style: {
+              color: theme.palette.secondary.dark,
+              backgroundColor: theme.palette.secondary.light,
+              marginBottom: 4,
+              marginTop: 4,
+              boxShadow: '2px 2px 4px 0px rgba(0,0,0,0.1)',
+            }
+          }
+        }
+        }
       />
     </GridToolbarContainer>
   );
@@ -216,8 +231,21 @@ export default function DataTable() {
           toolbar: {
             setFilterButtonEl,
           },
+          filterPanel: {
+            sx(theme) {
+              return {
+                "& label": {
+                  color: theme.palette.text.primary,
+                },
+                "& .MuiInputLabel-standard": {
+                  color: theme.palette.text.primary,
+                },
+              };
+            },
+          },
         }}
       />
     </Paper>
   );
 }
+

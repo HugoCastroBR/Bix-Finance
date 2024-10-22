@@ -5,16 +5,16 @@ import { Box, Card, Typography } from "@mui/material"
 import styled from "styled-components"
 
 
-
 const InfoCard = styled(Card)({
-  flexShrink: 1,
-  width: 360,
+  flexShrink: 0,
+  width: 'calc(25% - 8px)',
+  minWidth: 260,
   height: 160,
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   borderRadius: 20,
-  padding: 20,
+  padding: 12,
   boxShadow: '4px 4px 8px -2px rgba(0,0,0,0.1)',
   backgroundColor: theme.palette.secondary.light,
 })
@@ -49,12 +49,12 @@ export default function CardItem() {
         <Typography
           fontWeight={300}
           fontSize={16}
-          color=''
+          color='secondary.dark'
         >
           Receita
         </Typography>
         <Typography
-          color='background'
+          color='secondary'
           fontWeight={600}
           fontSize={26}
         >

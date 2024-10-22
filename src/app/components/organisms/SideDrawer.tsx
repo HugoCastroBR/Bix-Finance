@@ -6,9 +6,11 @@ import IconButton from '@mui/material/IconButton';
 import { Close, Menu, Logout } from '@mui/icons-material';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import theme from '@/app/theme';
+
 const drawerWidth = 320;
 
 const openedMixin = (theme: Theme): CSSObject => ({
+  
   width: drawerWidth,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -18,13 +20,13 @@ const openedMixin = (theme: Theme): CSSObject => ({
   border: "none"
 });
 
-const closedMixin = (theme: Theme): CSSObject => ({
+const closedMixin = (theme: Theme,isMobile: boolean): CSSObject => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: isMobile ? 0 : `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
@@ -40,8 +42,13 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme }) => ({
+interface DrawerProps {
+  isMobile: boolean;
+}
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'isMobile', // Evita que 'open' e 'isMobile' sejam passados para o DOM
+})<DrawerProps>(({ theme, isMobile })=> ({
     position: 'absolute',
     width: drawerWidth,
     flexShrink: 0,
@@ -58,8 +65,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
       {
         props: ({ open }) => !open,
         style: {
-          ...closedMixin(theme),
-          '& .MuiDrawer-paper': closedMixin(theme),
+          ...closedMixin(theme,isMobile),
+          '& .MuiDrawer-paper': closedMixin(theme,isMobile),
         },
       },
     ],
@@ -109,30 +116,84 @@ const SideDrawer = ({
     onDrawerToggle(!isOpen);
   };
 
+
+
   return (
-    <Drawer variant="permanent" open={isOpen}>
-      <DrawerHeader>
-        <IconButton 
-        onClick={handleDrawerToggle}
-        sx={{marginRight: '5px'}}
-        >
-          {isOpen ? <Close /> : <Menu />}
-        </IconButton>
-      </DrawerHeader>
-      <Divider
+    <>
+      <Box
         sx={{
-          backgroundColor: 'white'
+          position: 'absolute',
+          width: 50,
+          height: 50,
+          borderRadius: 2,
+          top: 4,
+          left: 4,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: theme.palette.secondary.main
         }}
-      />
-      <OptionsList>
-        <OptionBox>
-          <OptionText>
-            LOGOUT
-          </OptionText>
-          <Logout />
-        </OptionBox>
-      </OptionsList>
-    </Drawer>
+      >
+        <IconButton
+          onClick={handleDrawerToggle}
+          sx={{ marginRight: '5px' }}
+        >
+          {isOpen
+            ?
+            <Close
+              style={{
+                color: theme.palette.primary.light
+              }}
+            />
+            :
+            <Menu
+              style={{
+                color: theme.palette.primary.light
+              }}
+            />}
+        </IconButton>
+      </Box>
+      <Drawer
+        variant="permanent"
+        open={isOpen}
+        isMobile={true}
+      >
+        <DrawerHeader>
+          <IconButton
+            onClick={handleDrawerToggle}
+            sx={{ marginRight: '6px' }}
+          >
+            {isOpen
+              ?
+              <Close
+                style={{
+                  color: theme.palette.primary.light
+                }}
+              />
+              :
+              <Menu
+                style={{
+                  color: theme.palette.primary.light
+                }}
+              />}
+          </IconButton>
+        </DrawerHeader>
+        <Divider
+          sx={{
+            backgroundColor: 'white'
+          }}
+        />
+        <OptionsList>
+          <OptionBox>
+            <OptionText>
+              LOGOUT
+            </OptionText>
+            <Logout />
+          </OptionBox>
+        </OptionsList>
+      </Drawer>
+    </>
+
   )
 }
 

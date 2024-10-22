@@ -11,8 +11,8 @@ const CardItemContainer = styled(Box)({
   flexGrow: 1,
   width: '100%',
   padding: 20,
-  gap: 20,
-  backgroundColor: 'red',
+  paddingLeft: 0,
+  gap: 16,
   overflowX: 'scroll',
   scrollbarWidth: 'none',
 })
