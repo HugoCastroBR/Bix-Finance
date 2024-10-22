@@ -1,11 +1,11 @@
 import theme from "@/app/theme"
 import { mdiCashPlus } from "@mdi/js"
 import Icon from "@mdi/react"
-import { Box, Card, Typography } from "@mui/material"
+import { Box, Card, Paper, Typography } from "@mui/material"
 import styled from "styled-components"
 
 
-const InfoCard = styled(Card)({
+const InfoCard = styled(Paper)({
   flexShrink: 0,
   width: 'calc(25% - 8px)',
   minWidth: 260,
@@ -15,8 +15,6 @@ const InfoCard = styled(Card)({
   alignItems: 'center',
   borderRadius: 20,
   padding: 12,
-  boxShadow: '4px 4px 8px -2px rgba(0,0,0,0.1)',
-  backgroundColor: theme.palette.secondary.light,
 })
 
 const CardIconBox = styled(Box)({
@@ -37,13 +35,22 @@ const ValueBox = styled(Box)({
   alignItems: 'end',
 })
 
+export interface ICardItemProps{
+  fieldName: string,
+  value: string | number,
+  icon: React.ReactNode
+}
 
-export default function CardItem() {
+
+export default function CardItem({
+  fieldName,
+  value,
+  icon,
+}: ICardItemProps) {
   return(
-
     <InfoCard>
       <CardIconBox>
-        <Icon path={mdiCashPlus} size={2} color={theme.palette.secondary.main} />
+        {icon}
       </CardIconBox>
       <ValueBox>
         <Typography
@@ -51,14 +58,14 @@ export default function CardItem() {
           fontSize={16}
           color='secondary.dark'
         >
-          Receita
+          {fieldName}
         </Typography>
         <Typography
           color='secondary'
           fontWeight={600}
           fontSize={26}
         >
-          R$1000,00
+          {value}
         </Typography>
       </ValueBox>
     </InfoCard>

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import { Close, Menu, Logout } from '@mui/icons-material';
+import { Close, Menu, Logout, Home } from '@mui/icons-material';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import theme from '@/app/theme';
 
@@ -20,14 +20,14 @@ const openedMixin = (theme: Theme): CSSObject => ({
   border: "none"
 });
 
-const closedMixin = (theme: Theme,isMobile: boolean): CSSObject => ({
+const closedMixin = (theme: Theme): CSSObject => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: isMobile ? 0 : `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
+  width: `0`,
+  [theme.breakpoints.up('md')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
   border: "none"
@@ -42,13 +42,10 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-interface DrawerProps {
-  isMobile: boolean;
-}
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'isMobile', // Evita que 'open' e 'isMobile' sejam passados para o DOM
-})<DrawerProps>(({ theme, isMobile })=> ({
+  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'isMobile', 
+})(({ theme })=> ({
     position: 'absolute',
     width: drawerWidth,
     flexShrink: 0,
@@ -65,8 +62,8 @@ const Drawer = styled(MuiDrawer, {
       {
         props: ({ open }) => !open,
         style: {
-          ...closedMixin(theme,isMobile),
-          '& .MuiDrawer-paper': closedMixin(theme,isMobile),
+          ...closedMixin(theme),
+          '& .MuiDrawer-paper': closedMixin(theme),
         },
       },
     ],
@@ -92,6 +89,7 @@ const OptionBox = styled(Button)({
   justifyContent: 'end',
   alignItems: 'center',
   padding: 10,
+  paddingTop: 20,
   paddingRight: 20,
 });
 
@@ -115,8 +113,6 @@ const SideDrawer = ({
     setIsOpen(!isOpen);
     onDrawerToggle(!isOpen);
   };
-
-
 
   return (
     <>
@@ -156,7 +152,6 @@ const SideDrawer = ({
       <Drawer
         variant="permanent"
         open={isOpen}
-        isMobile={true}
       >
         <DrawerHeader>
           <IconButton
@@ -187,6 +182,12 @@ const SideDrawer = ({
           <OptionBox>
             <OptionText>
               LOGOUT
+            </OptionText>
+            <Home />
+          </OptionBox>
+          <OptionBox>
+            <OptionText>
+              HOME
             </OptionText>
             <Logout />
           </OptionBox>
