@@ -12,9 +12,10 @@ export const columns: GridColDef[] = [
   {
     field: 'amount',
     headerName: 'Amount',
-    valueGetter: (value) => {
+    valueGetter: (value,row) => {
       const newValue = parseFloat(value) / 100;
-      return newValue.toFixed(2);
+      const currency = row.currency; 
+      return formatCurrency(newValue, currency);
     },
     minWidth: 120,
     flex: 1,
@@ -49,12 +50,16 @@ export const columns: GridColDef[] = [
     flex: 1,
     minWidth: 120,
   },
-  {
-    field: 'transactionDetails',
-    headerName: 'Transaction Details',
-    description: 'This column combines the type and amount of the transaction.',
-    sortable: false,
-    valueGetter: (_, row) => `${row.transaction_type} of ${parseFloat(row.amount) / 100} ${row.currency}`,
-    flex: 2,
-  },
 ];
+
+function formatCurrency(value: number, currency: string): string {
+  const options: Intl.NumberFormatOptions = {
+    style: 'currency',
+    currency: currency === 'brl' ? 'BRL' : 'USD', 
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  };
+
+  const formatter = new Intl.NumberFormat('pt-BR', options); 
+  return formatter.format(value);
+}

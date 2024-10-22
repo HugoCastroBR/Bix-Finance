@@ -55,7 +55,7 @@ export default function CardItem({
       <ValueBox>
         <Typography
           fontWeight={300}
-          fontSize={16}
+          fontSize={14}
           color='secondary.dark'
         >
           {fieldName}
@@ -63,7 +63,7 @@ export default function CardItem({
         <Typography
           color='secondary'
           fontWeight={600}
-          fontSize={26}
+          fontSize={16}
         >
           {value}
         </Typography>
