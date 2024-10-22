@@ -1,39 +1,57 @@
 import { Paper } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StyledDataGrid from '../atoms/DataGrid';
 import { columns } from '../atoms/TableColumns';
 import CustomToolbar from '../molecules/CustomToolbar';
 import { GridSlots } from '@mui/x-data-grid';
-import { PaginatedTransactionsResponse } from '@/app/utils/types';
+import {  Transaction } from '@/app/utils/types';
+import useStore from '@/app/hooks/useStore';
 
 
-const paginationModel = { page: 0, pageSize: 10 };
+const paginationModel = { page: 1, pageSize: 10 };
 
-interface IDataTableProps extends PaginatedTransactionsResponse{
-  isLoading: boolean
-}
+// const getData = async (startDate: number, endDate: number,) => {
+//   const response = await fetch(`/api/transactions?startDate=${startDate}&endDate=${endDate}`, {
+//     cache: "no-cache",
+//   });
+//   const data = await response.json();
+//   return data as PaginatedTransactionsResponse;
+// };
+
 
 const DataTable = ({
-  transactions,
-  page,
-  pageSize,
-  total,
-  isLoading
-}:IDataTableProps) => {
-  const [filterButtonEl, setFilterButtonEl] = useState<HTMLButtonElement | null>(null);
 
-  
+}) => {
+
+  const { states, } = useStore()
+
+  const [isLoading, ] = useState(false)
+
+  const [transactionData,setTransactionData] = useState<Transaction[]>([])
+
+  useEffect(() => {
+    console.log('states', states.transactions.transactionData);
+    setTransactionData(states.transactions.transactionData.transactions)
+  },[states.transactions.dateFrom, states.transactions.dateTo,states.transactions.transactionData.transactions,])
+
+
+
+
   return (
-    <Paper sx={{ height: 400, width: '100%' }}>
+    <Paper sx={{ height: 640, width: '100%' }}>
       <StyledDataGrid
-        onFilterModelChange={(model) => console.log(model)}
-        rows={transactions.map((transaction, index) => ({
+        onSortModelChange={() => {
+          console.log('sort model change');
+        }}
+        disableColumnFilter
+        rows={transactionData && transactionData.map((transaction:Transaction, index:number) => ({
           id: index,
           ...transaction,
         }))}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
+        pageSizeOptions={[5, 10, 20, 50, 100]}
+        rowCount={states?.transactions?.transactionsData?.total || 0}
         loading={isLoading}
         slots={{
           toolbar: CustomToolbar as GridSlots['toolbar'],
@@ -42,24 +60,6 @@ const DataTable = ({
           loadingOverlay: {
             variant: 'linear-progress',
             noRowsVariant: 'skeleton',
-          },
-          panel: {
-            anchorEl: filterButtonEl,
-          },
-          toolbar: {
-            setFilterButtonEl,
-          },
-          filterPanel: {
-            sx(theme) {
-              return {
-                "& label": {
-                  color: theme.palette.secondary.dark,
-                },
-                "& .MuiInputLabel-standard": {
-                  color: theme.palette.secondary.dark,
-                },
-              };
-            },
           },
         }}
       />

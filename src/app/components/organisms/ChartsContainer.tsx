@@ -1,6 +1,6 @@
 'use client';
 import { Transaction } from '@/app/utils/types';
-import React from 'react';
+import React, { use, useEffect, useState } from 'react';
 import ChartBox from '../atoms/ChartBox';
 import ChartPaper from '../atoms/ChartPaper';
 import LineChart from '../molecules/LineChart';
@@ -19,6 +19,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { getTransactionTypeData, getLineData, getIndustryData, getStateData, getIndustryTransactionData } from '@/app/utils/chartData';
+import useStore from '@/app/hooks/useStore';
 
 ChartJS.register(
   CategoryScale,
@@ -34,13 +35,16 @@ ChartJS.register(
 
 
 const ChartsContainer = () => {
-  const transactionData: Transaction[] = [
-    { id: 1, date: 1627849200000, amount: '500', transaction_type: 'deposit', currency: 'USD', account: 'A1', industry: 'Tech', state: 'NY' },
-    { id: 2, date: 1627935600000, amount: '1000', transaction_type: 'withdraw', currency: 'EUR', account: 'A2', industry: 'Finance', state: 'CA' },
-    { id: 3, date: 1628022000000, amount: '750', transaction_type: 'deposit', currency: 'USD', account: 'A3', industry: 'Retail', state: 'NY' },
-    { id: 4, date: 1628108400000, amount: '250', transaction_type: 'deposit', currency: 'USD', account: 'A4', industry: 'Tech', state: 'FL' },
-    { id: 5, date: 1628194800000, amount: '1500', transaction_type: 'withdraw', currency: 'GBP', account: 'A5', industry: 'Healthcare', state: 'NY' },
-  ];
+
+  const { states } = useStore();
+  const [transactionData,setTransactionData] = useState<Transaction[]>([])
+
+  useEffect(() => {
+    console.log('states', states.transactions.transactionData);
+    setTransactionData(states.transactions.transactionData.transactions)
+  },[states.transactions.dateFrom, states.transactions.dateTo,states.transactions.transactionData.transactions,])
+
+
 
   const transactionTypeData = getTransactionTypeData(transactionData);
   const lineData = getLineData(transactionData);

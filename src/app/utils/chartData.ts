@@ -1,6 +1,21 @@
 import { Transaction } from "./types";
 
 export const getTransactionTypeData = (transactions: Transaction[]) => {
+  if (!transactions) {
+    return {
+      labels: ['Deposit', 'Withdraw'],
+      datasets: [
+        {
+          label: 'Transaction Type',
+          data: [0, 0],
+          backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+          borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+          borderWidth: 1,
+        },
+      ],
+    };
+  }
+
   return {
     labels: ['Deposit', 'Withdraw'],
     datasets: [
@@ -19,9 +34,23 @@ export const getTransactionTypeData = (transactions: Transaction[]) => {
 };
 
 export const getLineData = (transactions: Transaction[]) => {
+  if (!transactions) {
+    return {
+      labels: [],
+      datasets: [
+        {
+          label: 'Transaction Amount',
+          data: [],
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        },
+      ],
+    };
+  }
+
   const labels = transactions.map((t) => new Date(t.date).toLocaleDateString());
-  const uniqueLabels = Array.from(new Set(labels)); 
-  
+  const uniqueLabels = Array.from(new Set(labels));
+
   return {
     labels: uniqueLabels,
     datasets: [
@@ -40,6 +69,21 @@ export const getLineData = (transactions: Transaction[]) => {
 };
 
 export const getIndustryData = (transactions: Transaction[]) => {
+  if (!transactions) {
+    return {
+      labels: [],
+      datasets: [
+        {
+          label: 'Transaction by Industry',
+          data: [],
+          backgroundColor: 'rgba(255, 206, 86, 0.6)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: 1,
+        },
+      ],
+    };
+  }
+
   const industryLabels = Array.from(new Set(transactions.map((t) => t.industry)));
 
   return {
@@ -62,6 +106,20 @@ export const getIndustryData = (transactions: Transaction[]) => {
 };
 
 export const getStateData = (transactions: Transaction[]) => {
+  if (!transactions) {
+    return {
+      labels: [],
+      datasets: [
+        {
+          label: 'Transactions by State',
+          data: [],
+          backgroundColor: 'rgba(255, 159, 64, 0.6)',
+          borderColor: 'rgba(255, 159, 64, 1)',
+          borderWidth: 1,
+        },
+      ],
+    };
+  }
   const stateLabels = Array.from(new Set(transactions.map((t) => t.state)));
 
   return {
@@ -81,8 +139,22 @@ export const getStateData = (transactions: Transaction[]) => {
 };
 
 export const getIndustryTransactionData = (transactions: Transaction[]) => {
+  if (!transactions) {
+    return {
+      labels: [],
+      datasets: [
+        {
+          label: 'Transactions by Industry',
+          data: [],
+          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+        },
+      ],
+    };
+  }
   const industryLabels = Array.from(new Set(transactions.map((t) => t.industry)));
-
+  console.log('loading industry data', industryLabels);
   return {
     labels: industryLabels,
     datasets: [
@@ -100,7 +172,7 @@ export const getIndustryTransactionData = (transactions: Transaction[]) => {
             'rgba(75, 192, 192, 0.6)',
             'rgba(153, 102, 255, 0.6)',
           ];
-          return colors[index % colors.length]; 
+          return colors[index % colors.length];
         }),
         borderColor: industryLabels.map((_, index) => {
           const colors = [
@@ -110,7 +182,7 @@ export const getIndustryTransactionData = (transactions: Transaction[]) => {
             'rgba(75, 192, 192, 1)',
             'rgba(153, 102, 255, 1)',
           ];
-          return colors[index % colors.length]; 
+          return colors[index % colors.length];
         }),
         borderWidth: 1,
       },

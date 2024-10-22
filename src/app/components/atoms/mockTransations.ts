@@ -19,5 +19,5 @@ export const mockTransactions: Transaction[] = [
     industry: "Healthcare",
     state: "TX",
   },
-  // Outras transações omitidas para brevidade
+  
 ];

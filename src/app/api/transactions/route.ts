@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { Transaction } from "@/app/utils/types";
-import { readTransactions } from "@/app/utils/functions";
+import { readTransactions } from "@/app/utils/asyncFunctions";
 
 export type Filters = {
   column?: keyof Transaction;
@@ -13,47 +13,11 @@ export type Filters = {
   };
 };
 
-
-
 function filterTransactions(transactions: Transaction[], filters: Filters): Transaction[] {
-  const { column, operator, value, dateRange } = filters;
-  
+  const {  dateRange } = filters;
+  console.log('dateRange', dateRange)
   return transactions.filter(transaction => {
-
-    if (column && operator && value) {
-      const columnValue = transaction[column];
-
-      if (columnValue === undefined) {
-        return false;
-      }
-
-      const columnValueStr = columnValue.toString();
-      const valueStr = value.toString();
-
-      switch (operator) {
-        case 'is':
-          return columnValueStr === valueStr;
-        case 'is not':
-          return columnValueStr !== valueStr;
-        case 'is after':
-          return Number(columnValue) > Number(value);
-        case 'is on or after':
-          return Number(columnValue) >= Number(value);
-        case 'is before':
-          return Number(columnValue) < Number(value);
-        case 'is on or before':
-          return Number(columnValue) <= Number(value);
-        case 'is empty':
-          return columnValue === null || columnValue === '';
-        case 'is not empty':
-          return columnValue !== null && columnValue !== '';
-        default:
-          return true;
-      }
-    }
-    return true; 
-  }).filter(transaction => {
-    if (Array.isArray(dateRange) && dateRange.length === 2) {
+    if (dateRange?.startDate && dateRange?.endDate) {
       const { startDate, endDate } = dateRange;
       return transaction.date >= startDate && transaction.date <= endDate;
     }
@@ -83,14 +47,12 @@ function sortTransactions(transactions: Transaction[], sortBy: keyof Transaction
   });
 }
 
-
 export async function GET(req: NextRequest) {
+  console.log('api call')
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1", 10);
   const pageSize = parseInt(searchParams.get("pageSize") || "10", 10);
-  const column = searchParams.get("column") as keyof Transaction;
-  const operator = searchParams.get("operator") || '';
-  const value = searchParams.get("value") || '';
+
   const sortBy = searchParams.get("sortBy") as keyof Transaction || 'date'; 
   const order = (searchParams.get("order") === 'desc' ? 'desc' : 'asc') as 'asc' | 'desc'; 
 
@@ -98,6 +60,7 @@ export async function GET(req: NextRequest) {
     startDate: parseInt(searchParams.get("startDate") || "0", 10),
     endDate: parseInt(searchParams.get("endDate") || "Infinity", 10),
   };
+
 
   try {
     const transactions = await readTransactions();
@@ -108,17 +71,10 @@ export async function GET(req: NextRequest) {
       page,
       pageSize,
     });
+
     response.headers.append("Cache-Control", "max-age=60, s-maxage=120");
-
-    const filters: Filters = { column, operator, value, dateRange };
-    let filteredTransactions = filterTransactions(transactions, filters);
-
-    if (value) {
-      filteredTransactions = filteredTransactions.filter(transaction =>
-        transaction.amount.includes(value) || transaction.account.includes(value)
-      );
-    }
-    
+    const filters: Filters = {  dateRange };
+    const filteredTransactions = filterTransactions(transactions, filters);
 
     const sortedTransactions = sortTransactions(filteredTransactions, sortBy, order);
     const paginatedTransactions = paginateTransactions(sortedTransactions, page, pageSize);

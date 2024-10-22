@@ -1,9 +1,22 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { calculateExpenses, calculatePendingTransactions, calculateRevenue, calculateTotalBalance, getTodayAndSixMonthsAgo, isWithinOneYear, readTransactions } from "@/app/utils/functions";
+import { calculateExpenses, calculatePendingTransactions, calculateRevenue, calculateTotalBalance } from "@/app/utils/functions";
+import { Transaction } from "@/app/utils/types";
+import { Filters } from "../transactions/route";
+import { readTransactions } from "@/app/utils/asyncFunctions";
 
 
-
+function filterTransactions(transactions: Transaction[], filters: Filters): Transaction[] {
+  const {  dateRange } = filters;
+  console.log('dateRange', dateRange)
+  return transactions.filter(transaction => {
+    if (dateRange?.startDate && dateRange?.endDate) {
+      const { startDate, endDate } = dateRange;
+      return transaction.date >= startDate && transaction.date <= endDate;
+    }
+    return true; 
+  });
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -13,29 +26,14 @@ export async function GET(req: NextRequest) {
   try {
     const transactions = await readTransactions();
 
-    const filteredTransactions = transactions.filter(transaction => {
-      const transactionDate = new Date(transaction.date).getTime();
-      if(isNaN(transactionDate)) return false;
-      if(startDate === 0 && endDate === 0){
-        const {todayEpoch, sixMonthsAgoEpoch} = getTodayAndSixMonthsAgo();
-        return isWithinOneYear(todayEpoch, transactionDate) && isWithinOneYear(transactionDate, sixMonthsAgoEpoch);
-      }
-      if(isWithinOneYear(startDate,endDate)){
-        console.log('no')
-        return false
-      }
-      return transactionDate >= startDate && transactionDate <= endDate;
-    });
+    const filteredTransactions = filterTransactions(transactions, { dateRange: { startDate, endDate } });
     
-    
- 
-
     return NextResponse.json({
       transactions:filteredTransactions,
-      amountTotal: calculateTotalBalance(transactions),
-      withdrawTotal: calculateExpenses(transactions),
-      depositTotal: calculateRevenue(transactions),
-      pendingTransactions: calculatePendingTransactions(transactions),
+      amountTotal: calculateTotalBalance(filteredTransactions),
+      withdrawTotal: calculateExpenses(filteredTransactions),
+      depositTotal: calculateRevenue(filteredTransactions),
+      pendingTransactions: calculatePendingTransactions(filteredTransactions),
       total: filteredTransactions.length,
     });
   } catch (error) {

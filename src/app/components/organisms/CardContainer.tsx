@@ -10,12 +10,16 @@ import {
 } from "@mdi/js";
 import Icon from "@mdi/react"
 import { TransactionsStatsResponse } from "@/app/utils/types";
+import { useEffect, useState } from "react";
+import useStore from "@/app/hooks/useStore";
+import { TransactionsSetTransactionData } from "@/app/store/action";
+import { getTodayAndSixMonthsAgo } from "@/app/utils/functions";
 
 
 function formatCurrencyBRL(value: number): string {
+  if(!value) return 'R$ 0,00'
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
-
 
 const CardItemContainer = styled(Box)({
   display: 'flex',
@@ -32,21 +36,58 @@ const CardItemContainer = styled(Box)({
 })
 
 
+const getStats = async (
+  startDate: number,
+  endDate: number
+) => {
+  const response = await fetch(`http://localhost:3000/api/stats?startDate=${startDate}&endDate=${endDate}`,
+    {
+      cache: "no-cache"
+    }
+  );
+  const data = await response.json()
+  return data as TransactionsStatsResponse
+}
 
 
 
-export default function CardContainer({
-  amountTotal,
-  withdrawTotal,
-  depositTotal,
-  pendingTransactions,
-}:TransactionsStatsResponse) {
+export default function CardContainer({}) {
+
+  const {states,dispatch} = useStore()
+
+  const [statsData, setStatsData] = useState({
+    transactions: [],
+    amountTotal: 0,
+    withdrawTotal: 0,
+    depositTotal: 0,
+    pendingTransactions: 0,
+    total: 0
+  } as TransactionsStatsResponse)
+
+  const handlerGetStats = async () => {
+
+    const {todayEpoch,sixMonthsAgoEpoch} = getTodayAndSixMonthsAgo()
+    console.log('todayEpoch', todayEpoch)
+    const data = await getStats(
+      states.transactions.dateFrom || sixMonthsAgoEpoch,
+      states.transactions.dateTo || todayEpoch
+    )
+    console.log('data', data)
+    setStatsData(data)
+    dispatch(TransactionsSetTransactionData(data))
+  }
+
+  useEffect(
+    () => {
+      handlerGetStats()
+    }
+    , [states.transactions.dateFrom, states.transactions.dateTo])
 
 
   const Cards: ICardItemProps[] = [
     {
       fieldName: 'Saldo Total',
-      value: formatCurrencyBRL(amountTotal),
+      value: formatCurrencyBRL(statsData.amountTotal),
       icon:
         <Icon
           path={mdiPiggyBankOutline}
@@ -56,7 +97,7 @@ export default function CardContainer({
     },
     {
       fieldName: 'Receitas',
-      value: formatCurrencyBRL(depositTotal),
+      value: formatCurrencyBRL(statsData.depositTotal),
       icon:
         <Icon
           path={mdiCashPlus}
@@ -66,7 +107,7 @@ export default function CardContainer({
     },
     {
       fieldName: 'Despesas',
-      value: formatCurrencyBRL(withdrawTotal),
+      value: formatCurrencyBRL(statsData.withdrawTotal),
       icon:
         <Icon
           path={mdiCashMinus}
@@ -76,7 +117,7 @@ export default function CardContainer({
     },
     {
       fieldName: 'transações pendentes',
-      value: pendingTransactions,
+      value: statsData.pendingTransactions,
       icon:
         <Icon
           path={mdiCashClock}

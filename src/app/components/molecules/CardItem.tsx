@@ -1,7 +1,5 @@
 import theme from "@/app/theme"
-import { mdiCashPlus } from "@mdi/js"
-import Icon from "@mdi/react"
-import { Box, Card, Paper, Typography } from "@mui/material"
+import { Box, Paper, Typography } from "@mui/material"
 import styled from "styled-components"
 
 
