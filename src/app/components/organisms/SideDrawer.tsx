@@ -15,7 +15,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
-  border:"none"
+  border: "none"
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -28,13 +28,13 @@ const closedMixin = (theme: Theme): CSSObject => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  border:"none"
+  border: "none"
 });
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'flex-end',
+  justifyContent: 'end',
   padding: theme.spacing(0, 1),
   backgroundColor: theme.palette.secondary.main,
   ...theme.mixins.toolbar,
@@ -112,17 +112,14 @@ const SideDrawer = ({
   return (
     <Drawer variant="permanent" open={isOpen}>
       <DrawerHeader>
-        <IconButton onClick={handleDrawerToggle}>
-          {isOpen ?
-            <Close
-              fontSize='large'
-            /> :
-            <Menu
-              fontSize='large'
-            />}
+        <IconButton 
+        onClick={handleDrawerToggle}
+        sx={{marginRight: '5px'}}
+        >
+          {isOpen ? <Close /> : <Menu />}
         </IconButton>
       </DrawerHeader>
-      <Divider 
+      <Divider
         sx={{
           backgroundColor: 'white'
         }}
