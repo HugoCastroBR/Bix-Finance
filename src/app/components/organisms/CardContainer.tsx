@@ -123,7 +123,7 @@ export default function CardContainer({ }) {
   ]
 
   return (
-    <CardItemContainer>
+    <CardItemContainer as={'section'}>
       {Cards.map((card, index) => (
         <CardItem
           key={index}

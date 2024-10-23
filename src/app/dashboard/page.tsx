@@ -10,7 +10,7 @@ import Loading from '../components/pages/Loading';
 
 export default function DashBoard() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
+  const [loading, setLoading] = useState(true); 
 
   const checkLogin = () => {
     const sessionData = sessionStorage.getItem('loggedInUser');
@@ -23,6 +23,7 @@ export default function DashBoard() {
 
   useEffect(() => {
     checkLogin();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -30,7 +31,7 @@ export default function DashBoard() {
   }
 
   return (
-    <MainContainer>
+    <MainContainer as={'main'}>
       <DashBoardHeader dashboard />
       <CardContainer />
       <DataTable />

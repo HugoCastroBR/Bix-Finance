@@ -6,7 +6,7 @@ import ChartPaper from '../atoms/ChartPaper';
 import LineChart from '../molecules/LineChart';
 import PieChart from '../molecules/PieChart';
 import BarChart from '../molecules/BarChart';
-import StackedBarChart from '../molecules/StackedBarChart'; // Importando o gráfico de barras empilhadas
+import StackedBarChart from '../molecules/StackedBarChart';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,7 +19,7 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
-import { getTransactionTypeData, getLineData, getIndustryData, getStateData, getIndustryTransactionData, getStackedBarData } from '@/app/utils/chartData'; 
+import { getTransactionTypeData, getLineData, getIndustryData, getStateData, getIndustryTransactionData, getStackedBarData } from '@/app/utils/chartData';
 import useStore from '@/app/hooks/useStore';
 
 ChartJS.register(
@@ -47,10 +47,10 @@ const ChartsContainer = () => {
   const industryData = getIndustryData(transactionData);
   const stateData = getStateData(transactionData);
   const industryTransactionData = getIndustryTransactionData(transactionData);
-  const stackedBarData = getStackedBarData(transactionData); 
+  const stackedBarData = getStackedBarData(transactionData);
 
   return (
-    <ChartBox>
+    <ChartBox as={'section'}>
       <ChartPaper>
         <PieChart data={transactionTypeData} title="Transactions by Type" />
       </ChartPaper>
@@ -67,7 +67,7 @@ const ChartsContainer = () => {
         <PieChart data={industryTransactionData} title="Transaction Count by Industry" />
       </ChartPaper>
       <ChartPaper>
-        <StackedBarChart data={stackedBarData} title="Stacked Transactions" /> 
+        <StackedBarChart data={stackedBarData} title="Stacked Transactions" />
       </ChartPaper>
     </ChartBox>
   );

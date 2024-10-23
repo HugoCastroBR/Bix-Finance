@@ -49,14 +49,12 @@ describe('Transaction Data Functions', () => {
 
   test('getLineData should return correct line data for transactions', () => {
     const result = getLineData(mockTransactions);
-    console.log(result.labels);
     expect(result.labels).toEqual([
       '4/28/2023', // Baker Hughes (date: 1682698259192)
       '1/8/2023', // General Mills (date: 1673216606378)
       '12/17/2022', // Wynn Resorts (date: 1671293734303)
       '8/25/2022', // Hyatt Hotels (date: 1661438596457)
     ]);
-    console.log(result.datasets[0].data);
     expect(result.datasets[0].data).toEqual([5565, 3716, 1480, 6894]);
   });
 

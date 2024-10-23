@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import React, { useState } from 'react';
 import LogoImage from '@/public/images/bix-tecnologia-logo.png';
 import { styled } from '@mui/material/styles';
@@ -7,7 +8,7 @@ import Image from 'next/image';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import TextFieldCustom from '../../components/molecules/TextFieldCustom';
-import { useRouter } from 'next/navigation';
+import { RegisteredUser } from '@/app/utils/types';
 import Link from 'next/link';
 
 const ContainerStyled = styled(Container)({
@@ -15,80 +16,94 @@ const ContainerStyled = styled(Container)({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-})
+});
 
-const LoginBox = styled(Box)({
+const ResetPasswordBox = styled(Box)({
   borderRadius: 10,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
   paddingBottom: 40,
-})
+});
 
 const AuthButton = styled(Button)({
   marginTop: 10,
   width: '100%',
-})
-
-const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().required('Required')
-    .min(6, 'Password must be at least 6 characters')
-    .max(20, 'Password must be at most 20 characters')
 });
 
-export default function Login() {
-  const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState('');
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  newPassword: Yup.string()
+    .required('New password is required')
+    .min(6, 'Password must be at least 6 characters')
+    .max(20, 'Password must be at most 20 characters'),
+  confirmNewPassword: Yup.string()
+    .oneOf([Yup.ref('newPassword')], 'Passwords must match')
+    .required('Confirm your new password'),
+});
 
-  const handleLogin = (data: { email: string, password: string }) => {
-    if (typeof window !== 'undefined') {
-      const storedUsers = localStorage.getItem('registeredUsers');
-      const users = storedUsers ? JSON.parse(storedUsers) : [];
-      const user = users.find((user: { email: string, password: string }) => user.email === data.email && user.password === data.password);
-
-      if (user) {
-        sessionStorage.setItem('loggedInUser', JSON.stringify(user));
-        router.push('/');
-      } else {
-        setErrorMessage('Invalid email or password');
-      }
-    }
-  };
+export default function ResetPassword() {
+  const [successMessage, setSuccessMessage] = useState('');
 
   return (
     <ContainerStyled as={'main'}>
-      <LoginBox
+      <ResetPasswordBox
         width={400}
-        height={600}
+        height={500}
         padding={2}
         bgcolor={'var(--highlight)'}
       >
         <Image
           src={LogoImage}
-          alt="My Image"
+          alt="Company Logo"
           width={200}
           height={54}
           style={{ marginBottom: 20 }}
         />
         <Typography
-          variant='h1'
+          variant="h1"
           fontSize={24}
           fontWeight={700}
-          color='primary'
+          color="primary"
         >
-          Login
+          Reset Password
         </Typography>
+        {successMessage && (
+          <Typography
+            variant="h6"
+            fontSize={16}
+            fontWeight={500}
+            color="green"
+            style={{ marginBottom: 20 }}
+          >
+            {successMessage}
+          </Typography>
+        )}
         <Formik
-          validateOnChange={true}
           initialValues={{
             email: '',
-            password: ''
+            newPassword: '',
+            confirmNewPassword: ''
           }}
           validationSchema={validationSchema}
-          onSubmit={(data, { setSubmitting }) => {
-            handleLogin(data);
+          onSubmit={(data, { setSubmitting, setErrors }) => {
+            if (typeof window !== "undefined") {
+              const storedUsers = localStorage.getItem("registeredUsers");
+              const users: RegisteredUser[] = storedUsers ? JSON.parse(storedUsers) : [];
+              const userIndex = users.findIndex(user => user.email === data.email);
+
+              if (userIndex === -1) {
+                setErrors({ email: 'Email not found' });
+                setSubmitting(false);
+                return;
+              }
+
+              users[userIndex].password = data.newPassword;
+              localStorage.setItem("registeredUsers", JSON.stringify(users));
+
+              setSuccessMessage('Password has been reset successfully!');
+            }
             setSubmitting(false);
           }}
         >
@@ -97,42 +112,35 @@ export default function Login() {
               <TextFieldCustom
                 label="Email"
                 margin="normal"
-                type='email'
-                name='email'
+                type="email"
+                name="email"
                 required
                 fullWidth
               />
               <TextFieldCustom
-                label="Password"
+                label="New Password"
                 margin="normal"
-                name='password'
+                name="newPassword"
                 required
-                type='password'
+                type="password"
                 fullWidth
               />
-
-              {errorMessage && (
-                <Typography color="error" variant="body2" style={{ marginTop: 10 }}>
-                  {errorMessage}
-                </Typography>
-              )}
-
+              <TextFieldCustom
+                label="Confirm New Password"
+                margin="normal"
+                name="confirmNewPassword"
+                required
+                type="password"
+                fullWidth
+              />
               <AuthButton
                 variant="outlined"
-                size='large'
+                size="large"
                 disabled={((!(isValid && dirty)) || isSubmitting)}
-                type='submit'
+                type="submit"
               >
-                Login
+                Reset Password
               </AuthButton>
-              <AuthButton
-                variant="outlined"
-                size='large'
-                onClick={() => router.push('/auth/register')}
-              >
-                Register
-              </AuthButton>
-
               <Box
                 display='flex'
                 flexDirection='row'
@@ -141,21 +149,21 @@ export default function Login() {
                 width='100%'
                 marginTop={1}
               >
-                <Link href="/auth/new-password">
+                <Link href="/auth/login">
                   <Typography
                     variant='h6'
                     fontSize={16}
                     fontWeight={500}
                     color='primary'
                   >
-                    Forgot Password?
+                    Login
                   </Typography>
                 </Link>
               </Box>
             </Form>
           )}
         </Formik>
-      </LoginBox>
+      </ResetPasswordBox>
     </ContainerStyled>
   );
 }

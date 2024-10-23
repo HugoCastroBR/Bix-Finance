@@ -29,7 +29,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   }),
   overflowX: 'hidden',
   width: `0`,
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
   border: "none"
@@ -111,7 +111,7 @@ const SideDrawer = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
-  
+
   const user = sessionStorage.getItem('loggedInUser');
 
   const handleDrawerToggle = () => {
@@ -165,9 +165,10 @@ const SideDrawer = ({
             sx={{
               display: 'flex',
               alignItems: 'center',
-              width: '100%',
+              width: '180%',
               height: '100%',
               marginRight: '80px',
+              overflow: 'hidden'
             }}
           >
             Hi, {user ? (JSON.parse(user) as RegisteredUser).name : 'User'}
@@ -176,7 +177,7 @@ const SideDrawer = ({
             onClick={handleDrawerToggle}
             sx={{ marginRight: '6px' }}
           >
-            
+
             {isOpen
               ?
               <Close
@@ -212,8 +213,8 @@ const SideDrawer = ({
           <OptionBox
             onClick={() => {
               if (typeof window !== 'undefined') {
-                sessionStorage.removeItem('loggedInUser'); 
-                router.push('/auth/login'); 
+                sessionStorage.removeItem('loggedInUser');
+                router.push('/auth/login');
               }
             }}
           >

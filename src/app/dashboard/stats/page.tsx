@@ -25,6 +25,7 @@ export default function DashBoard() {
 
   useEffect(() => {
     checkLogin();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -33,7 +34,7 @@ export default function DashBoard() {
 
   return (
     <Provider store={store}>
-      <MainContainer>
+      <MainContainer as={'main'}>
         <DashBoardHeader />
         <CardContainer />
         <ChartsContainer />

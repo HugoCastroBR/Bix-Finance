@@ -9,7 +9,6 @@ type ITransactionsSlice = {
   transactionData: TransactionsStatsResponse
 }
 
-
 export const TransactionsSlice = createSlice({
 	name: "TransactionsSlice",
 	initialState: {
