@@ -1,3 +1,4 @@
+import { TransactionsStatsResponse } from '../utils/types';
 import { transactionsActions } from './index';
 
 export const TransactionsSetDateFrom = (payload:number) => {
