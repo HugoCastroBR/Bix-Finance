@@ -6,7 +6,7 @@ import DataTable from '../components/organisms/DataTable';
 import MainContainer from '../components/organisms/MainContainer';
 import SideDrawer from '../components/organisms/SideDrawer';
 import { useRouter } from 'next/navigation';
-import Loading from '../components/pages/loading';
+import Loading from '../components/pages/Loading';
 
 export default function DashBoard() {
   const router = useRouter();

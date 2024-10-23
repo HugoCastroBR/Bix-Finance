@@ -8,7 +8,7 @@ import ChartsContainer from '@/app/components/organisms/ChartsContainer';
 import MainContainer from '@/app/components/organisms/MainContainer';
 import SideDrawer from '@/app/components/organisms/SideDrawer';
 import { useRouter } from 'next/navigation';
-import Loading from '@/app/components/pages/loading';
+import Loading from '@/app/components/pages/Loading';
 
 export default function DashBoard() {
   const router = useRouter();
