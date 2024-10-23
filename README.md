@@ -1,36 +1,75 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Bix - Finance
 
-First, run the development server:
+Projeto desenvolvido para teste de dev front end
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Instalação
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A aplicação tem o objetivo de ler o json com os dados necessarios de transações e exibir através de uma interface intuitiva.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+A aplicação segue o conceito de Atomic Design, priorizando componentes reutilizáveis e bem definidos.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Configuração
 
-## Learn More
+Para instalar as dependencias utilize:
 
-To learn more about Next.js, take a look at the following resources:
+`npm install`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Para iniciar o projeto utilize:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`npm run dev`
 
-## Deploy on Vercel
+A aplicação deve iniciar na porta 3000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Utilização
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Existem duas rotas disponiveis
+
+Home em (Redirect para Dashboard):
+
+`/`
+
+Dashboard em:
+
+`/dashboard`
+
+No Dashboard é possivel acessar os dados de transações, resumos e listagem das transações, juntamente com filtros e seleção de espaço de datas.
+
+Dashboard em:
+
+`/dashboard/stats`
+
+Em Stats é possivel visualizar diverssos graficos que cooperam para a interface objetiva, onde os graficos também seguem o padrão de espaço de datas
+
+## Autenticação
+
+### Login
+
+* **Rota** : `/auth/login`
+* **Descrição** : Na página de Login, os usuários podem inserir suas credenciais (e-mail e senha) para acessar sua conta. O formulário de login inclui validação em tempo real para garantir que os dados sejam preenchidos corretamente. Ao efetuar login com sucesso, os usuários são redirecionados para a página principal do Dashboard.
+
+### Registro
+
+* **Rota** : `/auth/register`
+* **Descrição** : Na página de Registro, novos usuários podem criar uma conta fornecendo informações necessárias, como nome, e-mail e senha. O formulário de registro também inclui validação para garantir que todos os campos sejam preenchidos corretamente e que a senha atenda aos critérios de segurança. Após o registro bem-sucedido, os usuários serão redirecionados para a página de Login, onde poderão acessar sua nova conta.
+
+## Testes
+
+Testes unitarios para utilizar as formulas matematicas empregadas para garantir um retorno de dados preciso, além de garantir o funcionamento correto da aplicação.
+
+Utilize:
+
+`npm run test`
+
+## Tecnologias Utilizadas
+
+* **Next.js** : Framework React para aplicações web, com renderização do lado do servidor e geração de sites estáticos.
+* **React** : Biblioteca para construção da interface do usuário.
+* **MUI (Material-UI)** : Biblioteca de componentes React que implementa o Material Design.
+* **Formik** : Gerenciamento de formulários em React, facilitando validação e manipulação de estados.
+* **Yup** : Biblioteca para validação de esquemas de dados, frequentemente usada com Formik.
+* **Chart.js** : Biblioteca para visualização de dados com gráficos interativos.
+* **TypeScript** : Superset de JavaScript que adiciona tipagem estática, melhorando a robustez do código.
+* **Redux Toolkit** : Ferramenta para gerenciamento de estado global em aplicações React.
+* **Jest** : Framework de testes para JavaScript, usado para testes unitários e de integração.
