@@ -38,6 +38,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function Login() {
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const router = useRouter();
 
   const handleLogin = (data: { email: string, password: string }) => {

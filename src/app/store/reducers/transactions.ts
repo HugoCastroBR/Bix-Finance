@@ -1,5 +1,5 @@
 
-import { PaginatedTransactionsResponse, TransactionsStatsResponse } from "@/app/utils/types";
+import { TransactionsStatsResponse } from "@/app/utils/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 type ITransactionsSlice = {
