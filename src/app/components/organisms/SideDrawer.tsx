@@ -165,9 +165,11 @@ const SideDrawer = ({
             sx={{
               display: 'flex',
               alignItems: 'center',
-              width: '100%',
+              justifyContent:'start',
+              width: '80%',
               height: '100%',
               marginRight: '80px',
+              overflow: 'hidden'
             }}
           >
             Hi, {user ? (JSON.parse(user) as RegisteredUser).name : 'User'}
