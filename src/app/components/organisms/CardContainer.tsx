@@ -38,7 +38,7 @@ const getStats = async (
   startDate: number,
   endDate: number
 ) => {
-  const response = await fetch(`http://localhost:3000/api/stats?startDate=${startDate}&endDate=${endDate}`,
+  const response = await fetch(`/api/stats?startDate=${startDate}&endDate=${endDate}`,
     {
       cache: "no-cache"
     }
@@ -60,25 +60,23 @@ export default function CardContainer({ }) {
     total: 0
   } as TransactionsStatsResponse)
 
-  const handlerGetStats = async () => {
-
-    const { todayEpoch, sixMonthsAgoEpoch } = getTodayAndXMonthsAgo(12)
-    const data = await getStats(
-      states.transactions.dateFrom || sixMonthsAgoEpoch,
-      states.transactions.dateTo || todayEpoch
-    )
-    setStatsData(data)
-    dispatch(TransactionsSetTransactionData(data))
-    dispatch(TransactionsSetIsLoading(false))
-
-  }
-
   useEffect(
     () => {
+      const handlerGetStats = async () => {
+        const { todayEpoch, sixMonthsAgoEpoch } = getTodayAndXMonthsAgo(12)
+        const data = await getStats(
+          states.transactions.dateFrom || sixMonthsAgoEpoch,
+          states.transactions.dateTo || todayEpoch
+        )
+        setStatsData(data)
+        dispatch(TransactionsSetTransactionData(data))
+        dispatch(TransactionsSetIsLoading(false))
+      }
+
       dispatch(TransactionsSetIsLoading(true))
       handlerGetStats()
     }
-    , [states.transactions.dateFrom, states.transactions.dateTo])
+    , [states.transactions.dateFrom, states.transactions.dateTo, dispatch])
 
 
   const Cards: ICardItemProps[] = [
@@ -125,7 +123,7 @@ export default function CardContainer({ }) {
   ]
 
   return (
-    <CardItemContainer>
+    <CardItemContainer as={'section'}>
       {Cards.map((card, index) => (
         <CardItem
           key={index}

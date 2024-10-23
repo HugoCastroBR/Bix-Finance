@@ -1,5 +1,5 @@
 
-import { PaginatedTransactionsResponse, TransactionsStatsResponse } from "@/app/utils/types";
+import { TransactionsStatsResponse } from "@/app/utils/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 type ITransactionsSlice = {
@@ -8,7 +8,6 @@ type ITransactionsSlice = {
   dateTo: number;
   transactionData: TransactionsStatsResponse
 }
-
 
 export const TransactionsSlice = createSlice({
 	name: "TransactionsSlice",

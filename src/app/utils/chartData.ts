@@ -213,14 +213,14 @@ export const getStackedBarData = (transactionData: Transaction[]) => {
 
   transactionData.forEach((transaction) => {
     const industry = transaction.industry;
-    const value = parseFloat(transaction.amount); 
-    
+    const value = parseFloat(transaction.amount);
+
     if (!industryData[industry]) {
       industryData[industry] = { count: 0, totalValue: 0 };
     }
-    
-    industryData[industry].count += 1; 
-    industryData[industry].totalValue += value; 
+
+    industryData[industry].count += 1;
+    industryData[industry].totalValue += value;
   });
 
   const labels = Object.keys(industryData);

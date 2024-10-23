@@ -1,14 +1,15 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import LogoImage from '@/public/images/bix-tecnologia-logo.png';
 import { styled } from '@mui/material/styles';
 import { Container, Box, Button, Typography } from '@mui/material';
 import Image from 'next/image';
 import * as Yup from 'yup';
-import { Form, Formik } from 'formik';
+import { Form, Formik, ErrorMessage } from 'formik';
 import TextFieldCustom from '../../components/molecules/TextFieldCustom';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { RegisteredUser } from '@/app/utils/types';
 
 const ContainerStyled = styled(Container)({
@@ -48,7 +49,7 @@ export default function Register() {
   const router = useRouter();
 
   return (
-    <ContainerStyled>
+    <ContainerStyled as={'main'}>
       <LoginBox
         width={400}
         height={600}
@@ -82,7 +83,6 @@ export default function Register() {
             if (typeof window !== "undefined") {
               const storedUsers = localStorage.getItem("registeredUsers");
               const users: RegisteredUser[] = storedUsers ? JSON.parse(storedUsers) : [];
-              
               const userExists = users.find(user => user.email === data.email);
 
               if (userExists) {
@@ -98,11 +98,13 @@ export default function Register() {
               });
 
               localStorage.setItem("registeredUsers", JSON.stringify(users));
+              setSubmitting(false);
+
+              router.push('/auth/login');
             }
-            setSubmitting(false);
           }}
         >
-          {({ isValid, dirty, isSubmitting }) => (
+          {({ isValid, dirty, isSubmitting, errors }) => (
             <Form>
               <TextFieldCustom
                 label="Name"
@@ -111,6 +113,8 @@ export default function Register() {
                 required
                 fullWidth
               />
+              <ErrorMessage name="name" component="div" />
+
               <TextFieldCustom
                 label="Email"
                 margin="normal"
@@ -119,6 +123,9 @@ export default function Register() {
                 required
                 fullWidth
               />
+              <ErrorMessage name="email" component="div" />
+              {errors.email && <Typography color="error">{errors.email}</Typography>}
+
               <TextFieldCustom
                 label="Password"
                 margin="normal"
@@ -127,6 +134,8 @@ export default function Register() {
                 type="password"
                 fullWidth
               />
+              <ErrorMessage name="password" component="div" />
+
               <TextFieldCustom
                 label="Confirm Password"
                 margin="normal"
@@ -135,6 +144,8 @@ export default function Register() {
                 type="password"
                 fullWidth
               />
+              <ErrorMessage name="confirmPassword" component="div" />
+
               <AuthButton
                 variant="outlined"
                 size="large"
@@ -143,6 +154,25 @@ export default function Register() {
               >
                 Register
               </AuthButton>
+              <Box
+                display='flex'
+                flexDirection='row'
+                justifyContent='center'
+                alignItems='center'
+                width='100%'
+                marginTop={1}
+              >
+                <Link href="/auth/login">
+                  <Typography
+                    variant='h6'
+                    fontSize={16}
+                    fontWeight={500}
+                    color='primary'
+                  >
+                    Login
+                  </Typography>
+                </Link>
+              </Box>
             </Form>
           )}
         </Formik>

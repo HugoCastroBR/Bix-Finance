@@ -8,7 +8,7 @@ const ChartPaper = styled(Paper)({
   alignItems: 'center',
   flexGrow: 1,
   flexBasis: 'calc(33.33% - 16px)',
-  minWidth: 400,
+  minWidth: 300,
   height: 400,
   padding: 8,
   minHeight: 300,
