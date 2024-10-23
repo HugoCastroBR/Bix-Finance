@@ -165,7 +165,8 @@ const SideDrawer = ({
             sx={{
               display: 'flex',
               alignItems: 'center',
-              width: '180%',
+              justifyContent:'start',
+              width: '80%',
               height: '100%',
               marginRight: '80px',
               overflow: 'hidden'

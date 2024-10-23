@@ -14,7 +14,7 @@ export const columns: GridColDef[] = [
     field: 'amount',
     headerName: 'Amount',
     valueGetter: (value, row) => {
-      const newValue = parseFloat(value) / 100;
+      const newValue = parseFloat(value);
       const currency = row.currency;
       return formatCurrency(newValue, currency);
     },
