@@ -30,3 +30,13 @@ export type RegisteredUser = {
   email: string;
   password: string;
 };
+
+export type Filters = {
+  column?: keyof Transaction;
+  operator?: string;
+  value?: string;
+  dateRange?: {
+    startDate: number;
+    endDate: number;
+  };
+};

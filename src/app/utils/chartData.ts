@@ -189,3 +189,57 @@ export const getIndustryTransactionData = (transactions: Transaction[]) => {
     ],
   };
 };
+
+export const getStackedBarData = (transactionData: Transaction[]) => {
+  const industryData: { [key: string]: { count: number; totalValue: number } } = {};
+
+  if (!transactionData) {
+    return {
+      labels: [],
+      datasets: [
+        {
+          label: 'Transaction Count',
+          data: [],
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        },
+        {
+          label: 'Total Value',
+          data: [],
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+      ],
+    };
+  }
+
+  transactionData.forEach((transaction) => {
+    const industry = transaction.industry;
+    const value = parseFloat(transaction.amount); 
+    
+    if (!industryData[industry]) {
+      industryData[industry] = { count: 0, totalValue: 0 };
+    }
+    
+    industryData[industry].count += 1; 
+    industryData[industry].totalValue += value; 
+  });
+
+  const labels = Object.keys(industryData);
+  const countData = labels.map(label => industryData[label].count);
+  const totalValueData = labels.map(label => industryData[label].totalValue);
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'Transaction Count',
+        data: countData,
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+      },
+      {
+        label: 'Total Value',
+        data: totalValueData,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+};

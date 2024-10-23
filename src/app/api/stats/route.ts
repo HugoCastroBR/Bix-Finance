@@ -1,14 +1,11 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { calculateExpenses, calculatePendingTransactions, calculateRevenue, calculateTotalBalance } from "@/app/utils/functions";
-import { Transaction } from "@/app/utils/types";
-import { Filters } from "../transactions/route";
+import { Filters, Transaction } from "@/app/utils/types";
 import { readTransactions } from "@/app/utils/asyncFunctions";
-
 
 function filterTransactions(transactions: Transaction[], filters: Filters): Transaction[] {
   const {  dateRange } = filters;
-  console.log('dateRange', dateRange)
   return transactions.filter(transaction => {
     if (dateRange?.startDate && dateRange?.endDate) {
       const { startDate, endDate } = dateRange;

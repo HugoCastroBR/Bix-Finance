@@ -60,7 +60,7 @@ export default function CardItem({
         <Typography
           color='secondary'
           fontWeight={600}
-          fontSize={16}
+          fontSize={18}
         >
           {value}
         </Typography>
