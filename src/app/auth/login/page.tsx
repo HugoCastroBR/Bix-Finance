@@ -6,7 +6,7 @@ import { Container, Box, Button, Typography } from '@mui/material';
 import Image from 'next/image';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
-import TextFieldCustom from '../components/molecules/TextFieldCustom';
+import TextFieldCustom from '../../components/molecules/TextFieldCustom';
 import { useRouter } from 'next/navigation';
 
 const ContainerStyled = styled(Container)({
@@ -38,8 +38,24 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function Login() {
-  const router = useRouter()
- 
+  const router = useRouter();
+
+  const handleLogin = (data: { email: string, password: string }) => {
+    if (typeof window !== 'undefined') {
+      const storedUsers = localStorage.getItem('registeredUsers');
+      const users = storedUsers ? JSON.parse(storedUsers) : [];
+
+      const user = users.find((user: { email: string, password: string }) => user.email === data.email && user.password === data.password);
+
+      if (user) {
+        sessionStorage.setItem('loggedInUser', JSON.stringify(user));
+        router.push('/');
+      } else {
+        alert('Invalid email or password');
+      }
+    }
+  };
+
   return (
     <ContainerStyled>
       <LoginBox
@@ -71,8 +87,8 @@ export default function Login() {
           }}
           validationSchema={validationSchema}
           onSubmit={(data, { setSubmitting }) => {
-            router.push('/')
-            setSubmitting(false)
+            handleLogin(data);
+            setSubmitting(false);
           }}
         >
           {({ isValid, dirty, isSubmitting }) => (
@@ -104,7 +120,7 @@ export default function Login() {
               <AuthButton
                 variant="outlined"
                 size='large'
-                disabled
+                onClick={() => router.push('/auth/register')}
               >
                 Register
               </AuthButton>

@@ -24,3 +24,9 @@ export type TransactionsStatsResponse = {
   pendingTransactions: number;   // Soma total de transações pendentes
   total: number;                 // Total de transações número de transações processadas
 };
+
+export type RegisteredUser = {
+  name: string;
+  email: string;
+  password: string;
+};

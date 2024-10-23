@@ -7,6 +7,7 @@ import { Close, Menu, Logout, Home } from '@mui/icons-material';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import theme from '@/app/theme';
 import { useRouter } from 'next/navigation';
+import { RegisteredUser } from '@/app/utils/types';
 
 const drawerWidth = 320;
 
@@ -110,6 +111,8 @@ const SideDrawer = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
+  
+  const user = sessionStorage.getItem('loggedInUser');
 
   const handleDrawerToggle = () => {
     setIsOpen(!isOpen);
@@ -156,10 +159,24 @@ const SideDrawer = ({
         open={isOpen}
       >
         <DrawerHeader>
+          <Typography
+            color="primary"
+            variant="h6"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              height: '100%',
+              marginRight: '80px',
+            }}
+          >
+            Hi, {user ? (JSON.parse(user) as RegisteredUser).name : 'User'}
+          </Typography>
           <IconButton
             onClick={handleDrawerToggle}
             sx={{ marginRight: '6px' }}
           >
+            
             {isOpen
               ?
               <Close
@@ -192,7 +209,14 @@ const SideDrawer = ({
             </OptionText>
             <Home />
           </OptionBox>
-          <OptionBox>
+          <OptionBox
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                sessionStorage.removeItem('loggedInUser'); 
+                router.push('/auth/login'); 
+              }
+            }}
+          >
             <OptionText>
               LOGOUT
             </OptionText>
