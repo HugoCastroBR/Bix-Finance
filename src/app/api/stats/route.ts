@@ -1,17 +1,17 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { calculateExpenses, calculatePendingTransactions, calculateRevenue, calculateTotalBalance } from "@/app/utils/functions";
+import { calculateExpenses, calculatePendingTransactions, calculateRevenue, calculateTotalBalance, convertAmount } from "@/app/utils/functions";
 import { Filters, Transaction } from "@/app/utils/types";
 import { readTransactions } from "@/app/utils/asyncFunctions";
 
 function filterTransactions(transactions: Transaction[], filters: Filters): Transaction[] {
-  const {  dateRange } = filters;
+  const { dateRange } = filters;
   return transactions.filter(transaction => {
     if (dateRange?.startDate && dateRange?.endDate) {
       const { startDate, endDate } = dateRange;
       return transaction.date >= startDate && transaction.date <= endDate;
     }
-    return true; 
+    return true;
   });
 }
 
@@ -23,10 +23,15 @@ export async function GET(req: NextRequest) {
   try {
     const transactions = await readTransactions();
 
-    const filteredTransactions = filterTransactions(transactions, { dateRange: { startDate, endDate } });
-    
+    const filteredTransactions = filterTransactions(transactions, { dateRange: { startDate, endDate } }).map((transaction) => {
+      return {
+        ...transaction,
+        amount: convertAmount(transaction.amount),
+      };
+    });
+
     return NextResponse.json({
-      transactions:filteredTransactions,
+      transactions: filteredTransactions,
       amountTotal: calculateTotalBalance(filteredTransactions),
       withdrawTotal: calculateExpenses(filteredTransactions),
       depositTotal: calculateRevenue(filteredTransactions),

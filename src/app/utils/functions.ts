@@ -53,3 +53,17 @@ export function getTodayAndXMonthsAgo(monthsAgo:number): { todayEpoch: number; s
   const sixMonthsAgoEpoch = sixMonthsAgo.getTime();
   return { todayEpoch, sixMonthsAgoEpoch };
 }
+
+export function convertAmount(amount: string): string {
+  if (amount.length < 3) {
+    amount = amount.padStart(3, '0');
+  }
+  
+  const integerPart = amount.slice(0, -2); 
+  const decimalPart = amount.slice(-2); 
+  
+  return `${integerPart},${decimalPart}`;
+}
+
+
+

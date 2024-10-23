@@ -7,7 +7,7 @@ import { GridSlots } from '@mui/x-data-grid';
 import { Transaction } from '@/app/utils/types';
 import useStore from '@/app/hooks/useStore';
 
-const paginationModel = { page: 1, pageSize: 10 };
+const paginationModel = { page: 1, pageSize: 15 };
 
 const DataTable = ({
 
