@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { calculateExpenses, calculatePendingTransactions, calculateRevenue, calculateTotalBalance } from "@/app/utils/functions";
+import { calculateExpenses, calculatePendingTransactions, calculateRevenue, calculateTotalBalance, convertAmount } from "@/app/utils/functions";
 import { Filters, Transaction } from "@/app/utils/types";
 import { readTransactions } from "@/app/utils/asyncFunctions";
 
@@ -22,7 +22,13 @@ export async function GET(req: NextRequest) {
 
   try {
     const transactions = await readTransactions();
-    const filteredTransactions = filterTransactions(transactions, { dateRange: { startDate, endDate } });
+
+    const filteredTransactions = filterTransactions(transactions, { dateRange: { startDate, endDate } }).map((transaction) => {
+      return {
+        ...transaction,
+        amount: convertAmount(transaction.amount),
+      };
+    });
 
     return NextResponse.json({
       transactions: filteredTransactions,

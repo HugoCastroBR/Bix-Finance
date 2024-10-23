@@ -39,7 +39,7 @@ export const getLineData = (transactions: Transaction[]) => {
       labels: [],
       datasets: [
         {
-          label: 'Transaction Amount',
+          label: 'Transaction Value(R$)',
           data: [],
           borderColor: 'rgba(54, 162, 235, 1)',
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -55,7 +55,7 @@ export const getLineData = (transactions: Transaction[]) => {
     labels: uniqueLabels,
     datasets: [
       {
-        label: 'Transaction Amount',
+        label: 'Transaction Value(R$)',
         data: uniqueLabels.map(label =>
           transactions
             .filter(t => new Date(t.date).toLocaleDateString() === label)
@@ -74,7 +74,7 @@ export const getIndustryData = (transactions: Transaction[]) => {
       labels: [],
       datasets: [
         {
-          label: 'Transaction by Industry',
+          label: 'Transaction by Industry(R$)',
           data: [],
           backgroundColor: 'rgba(255, 206, 86, 0.6)',
           borderColor: 'rgba(255, 206, 86, 1)',
@@ -90,7 +90,7 @@ export const getIndustryData = (transactions: Transaction[]) => {
     labels: industryLabels,
     datasets: [
       {
-        label: 'Transaction by Industry',
+        label: 'Transaction by Industry(R$)',
         data: industryLabels.map(
           (industry) =>
             transactions
