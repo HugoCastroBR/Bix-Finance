@@ -6,11 +6,12 @@ import IconButton from '@mui/material/IconButton';
 import { Close, Menu, Logout, Home } from '@mui/icons-material';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import theme from '@/app/theme';
+import { useRouter } from 'next/navigation';
 
 const drawerWidth = 320;
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  
+
   width: drawerWidth,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -44,33 +45,32 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'isMobile', 
-})(({ theme })=> ({
-    position: 'absolute',
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    variants: [
-      {
-        props: ({ open }) => open,
-        style: {
-          ...openedMixin(theme),
-          '& .MuiDrawer-paper': openedMixin(theme),
-        },
+  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'isMobile',
+})(({ theme }) => ({
+  position: 'absolute',
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': openedMixin(theme),
       },
-      {
-        props: ({ open }) => !open,
-        style: {
-          ...closedMixin(theme),
-          '& .MuiDrawer-paper': closedMixin(theme),
-        },
+    },
+    {
+      props: ({ open }) => !open,
+      style: {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': closedMixin(theme),
       },
-    ],
-  }),
+    },
+  ],
+}),
 );
 
-//  backgroundImage: `linear-gradient(45deg, ${theme.palette.secondary.main} 10%, ${theme.palette.secondary.contrastText} 100%)`,
 
 const OptionsList = styled(Box)({
   backgroundColor: theme.palette.secondary.main,
@@ -108,6 +108,8 @@ const SideDrawer = ({
 }: ISideDrawerProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const router = useRouter();
 
   const handleDrawerToggle = () => {
     setIsOpen(!isOpen);
@@ -179,15 +181,20 @@ const SideDrawer = ({
           }}
         />
         <OptionsList>
-          <OptionBox>
+          <OptionBox
+            onClick={(e) => {
+              e.preventDefault();
+              router.push('/');
+            }}
+          >
             <OptionText>
-              LOGOUT
+              Home
             </OptionText>
             <Home />
           </OptionBox>
           <OptionBox>
             <OptionText>
-              HOME
+              LOGOUT
             </OptionText>
             <Logout />
           </OptionBox>

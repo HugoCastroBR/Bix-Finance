@@ -15,10 +15,14 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const DashBoardHeader = () => (
+const DashBoardHeader = ({
+  dashboard,
+}: {
+  dashboard?: boolean
+}) => (
   <HeaderContainer>
     <HeaderTitle />
-    <HeaderMenu/>
+    <HeaderMenu dashboard={dashboard} />
   </HeaderContainer>
 );
 

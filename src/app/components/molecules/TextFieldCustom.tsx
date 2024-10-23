@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 
 interface ITextFieldCustom extends Omit<TextFieldProps, 'variant'> {
   variant?: TextFieldProps['variant'];
-  name: string; 
+  name: string;
 }
 
 const StyledTextField = styled(TextField)({

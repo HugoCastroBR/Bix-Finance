@@ -3,6 +3,7 @@ import { PaginatedTransactionsResponse, TransactionsStatsResponse } from "@/app/
 import { createSlice } from "@reduxjs/toolkit";
 
 type ITransactionsSlice = {
+  isLoading: boolean;
   dateFrom: number;
   dateTo: number;
   transactionData: TransactionsStatsResponse
@@ -12,6 +13,7 @@ type ITransactionsSlice = {
 export const TransactionsSlice = createSlice({
 	name: "TransactionsSlice",
 	initialState: {
+    isLoading: true,
     dateFrom: 0,
     dateTo: 0,
     transactionData: {
@@ -27,6 +29,9 @@ export const TransactionsSlice = createSlice({
     },
     SET_TRANSACTION_DATA(state,{payload}:{payload:TransactionsStatsResponse}){
       state.transactionData = payload
+    },
+    SET_IS_LOADING(state,{payload}:{payload:boolean}){
+      state.isLoading = payload
     }
 	},
 });

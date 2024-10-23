@@ -16,7 +16,6 @@ const FooterContainer = styled(Box)({
   marginTop:'60px'
 });
 
-
 const Footer = () => {
   return (
     <FooterContainer>

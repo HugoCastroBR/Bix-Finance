@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import CardItem, { ICardItemProps } from "../molecules/CardItem";
 import { styled } from "styled-components";
 import theme from "@/app/theme";
-import { 
+import {
   mdiCashPlus,
   mdiCashMinus,
   mdiCashClock,
@@ -12,12 +12,11 @@ import Icon from "@mdi/react"
 import { TransactionsStatsResponse } from "@/app/utils/types";
 import { useEffect, useState } from "react";
 import useStore from "@/app/hooks/useStore";
-import { TransactionsSetTransactionData } from "@/app/store/action";
-import { getTodayAndSixMonthsAgo } from "@/app/utils/functions";
-
+import { TransactionsSetIsLoading, TransactionsSetTransactionData } from "@/app/store/action";
+import { getTodayAndXMonthsAgo } from "@/app/utils/functions";
 
 function formatCurrencyBRL(value: number): string {
-  if(!value) return 'R$ 0,00'
+  if (!value) return 'R$ 0,00'
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
@@ -35,7 +34,6 @@ const CardItemContainer = styled(Box)({
   scrollbarWidth: 'none',
 })
 
-
 const getStats = async (
   startDate: number,
   endDate: number
@@ -49,11 +47,9 @@ const getStats = async (
   return data as TransactionsStatsResponse
 }
 
+export default function CardContainer({ }) {
 
-
-export default function CardContainer({}) {
-
-  const {states,dispatch} = useStore()
+  const { states, dispatch } = useStore()
 
   const [statsData, setStatsData] = useState({
     transactions: [],
@@ -66,19 +62,20 @@ export default function CardContainer({}) {
 
   const handlerGetStats = async () => {
 
-    const {todayEpoch,sixMonthsAgoEpoch} = getTodayAndSixMonthsAgo()
-    console.log('todayEpoch', todayEpoch)
+    const { todayEpoch, sixMonthsAgoEpoch } = getTodayAndXMonthsAgo(12)
     const data = await getStats(
       states.transactions.dateFrom || sixMonthsAgoEpoch,
       states.transactions.dateTo || todayEpoch
     )
-    console.log('data', data)
     setStatsData(data)
     dispatch(TransactionsSetTransactionData(data))
+    dispatch(TransactionsSetIsLoading(false))
+
   }
 
   useEffect(
     () => {
+      dispatch(TransactionsSetIsLoading(true))
       handlerGetStats()
     }
     , [states.transactions.dateFrom, states.transactions.dateTo])

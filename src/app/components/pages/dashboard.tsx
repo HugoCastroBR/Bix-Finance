@@ -14,16 +14,12 @@ import store from '@/app/store';
 
 export default function DashBoard() {
   return (
-    <Provider store={store} >
       <MainContainer>
         <DashBoardHeader />
         <CardContainer/>
         <DataTable/>
-        {/* <ChartsContainer /> */}
+        <ChartsContainer />
         <SideDrawer onDrawerToggle={() => {}} />
-        <Footer />
       </MainContainer>
-    </Provider>
-
   );
 }

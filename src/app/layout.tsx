@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
+import { Provider } from 'react-redux';
+import Providers from './components/organisms/Providers';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,9 +32,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme} >
-          {children}
-          </ThemeProvider>
+          <Providers>
+            {children}
+          </Providers>
         </AppRouterCacheProvider>
       </body>
     </html>

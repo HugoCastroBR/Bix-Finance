@@ -1,3 +1,4 @@
+import theme from "@/app/theme";
 import { Button, Paper } from "@mui/material";
 import { useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
@@ -18,6 +19,7 @@ interface DateRangePickerProps {
 export default function DateRangePicker({
   onChange,
 }:DateRangePickerProps) {
+  
 
   const { todayEpoch, sixMonthsAgoEpoch } = getTodayAndSixMonthsAgo();
   
@@ -32,7 +34,16 @@ export default function DateRangePicker({
   };
 
   return (
-    <Paper>
+    <Paper
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+      }}
+    >
      <DayPicker
       mode="range"
       onSelect={(dateRange) => {
@@ -49,8 +60,8 @@ export default function DateRangePicker({
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          width: '100%',
-          backgroundColor: 'red',
+          width: '80%',
+          backgroundColor: theme.palette.primary.dark,
         }}
       >
         Ok

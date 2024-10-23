@@ -71,7 +71,6 @@ export default function Login() {
           }}
           validationSchema={validationSchema}
           onSubmit={(data, { setSubmitting }) => {
-            console.log(data)
             router.push('/')
             setSubmitting(false)
           }}

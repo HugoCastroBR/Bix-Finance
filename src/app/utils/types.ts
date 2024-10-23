@@ -22,5 +22,5 @@ export type TransactionsStatsResponse = {
   withdrawTotal: number;         // Soma total de todos os saques
   depositTotal: number;          // Soma total de todos os depósitos
   pendingTransactions: number;   // Soma total de transações pendentes
-  total: number;                 // Total de transações (número de transações processadas)
+  total: number;                 // Total de transações número de transações processadas
 };

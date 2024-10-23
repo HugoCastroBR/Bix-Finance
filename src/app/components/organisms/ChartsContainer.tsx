@@ -1,6 +1,6 @@
 'use client';
 import { Transaction } from '@/app/utils/types';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChartBox from '../atoms/ChartBox';
 import ChartPaper from '../atoms/ChartPaper';
 import LineChart from '../molecules/LineChart';
@@ -33,18 +33,14 @@ ChartJS.register(
   ArcElement
 );
 
-
 const ChartsContainer = () => {
 
   const { states } = useStore();
-  const [transactionData,setTransactionData] = useState<Transaction[]>([])
+  const [transactionData, setTransactionData] = useState<Transaction[]>([])
 
   useEffect(() => {
-    console.log('states', states.transactions.transactionData);
     setTransactionData(states.transactions.transactionData.transactions)
-  },[states.transactions.dateFrom, states.transactions.dateTo,states.transactions.transactionData.transactions,])
-
-
+  }, [states.transactions.dateFrom, states.transactions.dateTo, states.transactions.transactionData.transactions,])
 
   const transactionTypeData = getTransactionTypeData(transactionData);
   const lineData = getLineData(transactionData);

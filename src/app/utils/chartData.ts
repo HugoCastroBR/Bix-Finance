@@ -153,8 +153,8 @@ export const getIndustryTransactionData = (transactions: Transaction[]) => {
       ],
     };
   }
+
   const industryLabels = Array.from(new Set(transactions.map((t) => t.industry)));
-  console.log('loading industry data', industryLabels);
   return {
     labels: industryLabels,
     datasets: [

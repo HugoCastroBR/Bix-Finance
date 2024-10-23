@@ -2,7 +2,6 @@ import theme from "@/app/theme"
 import { Box, Paper, Typography } from "@mui/material"
 import styled from "styled-components"
 
-
 const InfoCard = styled(Paper)({
   flexShrink: 0,
   width: 'calc(25% - 8px)',
@@ -33,7 +32,7 @@ const ValueBox = styled(Box)({
   alignItems: 'end',
 })
 
-export interface ICardItemProps{
+export interface ICardItemProps {
   fieldName: string,
   value: string | number,
   icon: React.ReactNode
@@ -45,7 +44,7 @@ export default function CardItem({
   value,
   icon,
 }: ICardItemProps) {
-  return(
+  return (
     <InfoCard>
       <CardIconBox>
         {icon}
