@@ -8,7 +8,6 @@ import Image from 'next/image';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import TextFieldCustom from '../../components/molecules/TextFieldCustom';
-import { useRouter } from 'next/navigation';
 import { RegisteredUser } from '@/app/utils/types';
 
 const ContainerStyled = styled(Container)({
@@ -45,7 +44,6 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function Register() {
-  const router = useRouter();
 
   return (
     <ContainerStyled>
